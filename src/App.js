@@ -5,7 +5,7 @@ import AttendanceView from './pages/AttendanceView';
 
 const App = () => (
   <div className="App">
-    <AttendanceView text="hello world"/>
+    <AttendanceView/>
     <Button type="primary">Button</Button>
   </div>
 );
