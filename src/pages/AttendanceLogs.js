@@ -3,6 +3,6 @@ import { Table, Tag, Space } from 'antd';
 
 function AttendanceLogs() {
     return (
-        
+        <div></div>
     );
 }
