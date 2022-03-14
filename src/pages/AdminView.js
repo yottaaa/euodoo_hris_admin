@@ -6,7 +6,8 @@ import {
   UserOutlined,
   QrcodeOutlined,
   ProfileOutlined,
-  LogoutOutlined
+  LogoutOutlined,
+  CalculatorOutlined
 } from '@ant-design/icons';
 import AccountView from './AccountView';
 import AttendanceView from './AttendanceScan';
@@ -52,9 +53,14 @@ function AdminView() {
                             <Menu.Item key="3" icon={<QrcodeOutlined />}>
                                 <Link to="/scan">Scan QRCode</Link>
                             </Menu.Item>
-                            <Menu.Item key="4" icon={<ProfileOutlined />}>Logs</Menu.Item>
+                            <Menu.Item key="4" icon={<ProfileOutlined />}>
+                                <Link to="/logs">Logs</Link>
+                            </Menu.Item>
+                            <Menu.Item key="5" icon={<CalculatorOutlined />}>
+                                <Link to="/calculator">Calculator</Link>
+                            </Menu.Item>
                         </SubMenu>
-                        <Menu.Item key="5" icon={<InfoCircleOutlined />}>
+                        <Menu.Item key="6" icon={<InfoCircleOutlined />}>
                         About
                         </Menu.Item>
                     </Menu>

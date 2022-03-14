@@ -11,7 +11,7 @@ export default function AttendanceScan() {
 
     React.useEffect(() => {
         axios.get(
-            `${BACKEND_URL}/api/v1/attendance/generate_qr/`,
+            `https://euodoo-attendance.herokuapp.com/api/v1/attendance/generate_qr/`,
             {
                 headers: {
                     'Authorization':`token ${global.token}`

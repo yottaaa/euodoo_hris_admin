@@ -1,40 +1,39 @@
 import React from 'react';
+import {
+  Input,
+  Button,
+  Select,
+  DatePicker,
+  Table,
+  Tag
+} from 'antd';
+import dateFormat from "dateformat";
 import axios from 'axios';
 import { BACKEND_URL } from '../assets/config';
-import { Table, Tag, Space, Input,
-    Button,
-    Select,
-    DatePicker 
-} from 'antd';
 import { GlobalContext } from '../store';
-import dateFormat from "dateformat";
 
-function AttendanceLogs() {
+function AttendanceCalculate() {
     const [global, setGlobal] = React.useContext(GlobalContext);
     const [employees, setEmployees] = React.useState([]);
     const [employee, setEmployee] = React.useState('');
     const [dateRange ,setDateRange] = React.useState([]);
     const [logs, setLogs] = React.useState([]);
+    const [totalHours, setTotalHours] = React.useState(0.0);
 
-    React.useEffect(() => {
+    React.useState(() => {
         (async () => {
-            await axios({
+            axios({
                 method: 'get',
-                url: `https://euodoo-attendance.herokuapp.com/api/v1/attendance/all/`,
+                url: `https://euodoo-attendance.herokuapp.com/api/v1/attendance/users/`,
                 headers: {
                     'Authorization': `token ${global.token}`
                 }
             }).then((res) => {
-                console.log(res.data)
-                setLogs(res.data)
+                setEmployees(res.data)
             }).catch((err) => {
                 console.log(err)
             })
         })();
-
-        return () => {
-            setLogs([])
-        }
     },[]);
 
     const columns = [
@@ -62,6 +61,24 @@ function AttendanceLogs() {
           </>)
         },
       ];
+
+    // const calculateHours = (data) => {
+    //     var start = new Date;
+    //     var end = new Date;
+    //     var total = 0.0;
+    //     var listAttend = {};
+    //     var count = 0;
+    //     data.forEach(element => {
+    //         if (listAttend[count].length === 2) {
+    //             count += 1;
+    //         } else if (listAttend[count].length === 0) {
+    //             if (element['status'] === 'TIMEIN') {
+    //                 star = new Date(element['status'])
+    //             }
+    //         }
+    //     });
+        
+    // }
 
     const handleDatePicker = (value, dateString) => {
         console.log(dateString);
@@ -117,4 +134,4 @@ function AttendanceLogs() {
     );
 }
 
-export default AttendanceLogs;
+export default AttendanceCalculate;

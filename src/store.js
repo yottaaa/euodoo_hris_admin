@@ -1,7 +1,11 @@
 import React from 'react';
 
 const initialState = {
-    username: null,
+    userData: {
+        username: '',
+        first_name: '',
+        last_name: ''
+    },
     token: null,
     isLoading: false,
     status: '',
