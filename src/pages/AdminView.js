@@ -72,7 +72,7 @@ function AdminView() {
                     <Content style={{ margin: '80px 16px' }}>
                         <Outlet/>
                     </Content>
-                    <Footer style={{ textAlign: 'center' }}> ©2018 Euodoo Technologies Inc.</Footer>
+                    <Footer style={{ textAlign: 'center' }}> ©2022 Euodoo Technologies Inc.</Footer>
                 </Layout>
             </Layout>
     );

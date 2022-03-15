@@ -5,7 +5,8 @@ import {
   Select,
   DatePicker,
   Table,
-  Tag
+  Tag,
+  Empty
 } from 'antd';
 import dateFormat from "dateformat";
 import axios from 'axios';
@@ -22,7 +23,7 @@ function AttendanceCalculate() {
 
     React.useState(() => {
         (async () => {
-            axios({
+            await axios({
                 method: 'get',
                 url: `https://euodoo-attendance.herokuapp.com/api/v1/attendance/users/`,
                 headers: {
@@ -116,10 +117,17 @@ function AttendanceCalculate() {
     return (
         <div style={{
             width: '100%',
+            height: '100%',
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
             backgroundColor: '#fff',
             padding: '10px'
         }}>
-            <Input.Group compact style={{ margin: '10px 0px' }}>
+            <Empty description={false}>
+                <h3>This feature will be available soon.</h3>
+            </Empty>
+            {/* <Input.Group compact style={{ margin: '10px 0px' }}>
                 <Select defaultValue="Select Employee" onChange={handleSelect} style={{ width: '30%' }}>
                     {employees.map(employee => (
                         <Select.Option key={employee.id} value={employee.username}>{employee.username}</Select.Option>
@@ -128,8 +136,8 @@ function AttendanceCalculate() {
                 <DatePicker.RangePicker onChange={handleDatePicker} style={{ width: '60%' }} />
                 <Button type="primary" onClick={handleFilterSearch} style={{ width: '10%' }}>Search</Button>
             </Input.Group>
-            {/* <h1>8 Hours</h1> */}
-            <Table columns={columns} dataSource={logs} />
+            
+            <Table columns={columns} dataSource={logs} /> */}
         </div>
     );
 }

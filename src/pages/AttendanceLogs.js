@@ -30,6 +30,17 @@ function AttendanceLogs() {
             }).catch((err) => {
                 console.log(err)
             })
+            await axios({
+                method: 'get',
+                url: `https://euodoo-attendance.herokuapp.com/api/v1/attendance/users/`,
+                headers: {
+                    'Authorization': `token ${global.token}`
+                }
+            }).then((res) => {
+                setEmployees(res.data)
+            }).catch((err) => {
+                console.log(err)
+            })
         })();
 
         return () => {
@@ -73,6 +84,21 @@ function AttendanceLogs() {
         setEmployee(value);
     }
 
+    const handleRefresh = () => {
+        axios({
+            method: 'get',
+            url: `https://euodoo-attendance.herokuapp.com/api/v1/attendance/all/`,
+            headers: {
+                'Authorization': `token ${global.token}`
+            }
+        }).then((res) => {
+            console.log(res.data)
+            setLogs(res.data)
+        }).catch((err) => {
+            console.log(err)
+        })
+    }
+
     const handleFilterSearch = () => {
         (async () => {
             axios({
@@ -113,6 +139,7 @@ function AttendanceLogs() {
             </Input.Group>
             {/* <h1>8 Hours</h1> */}
             <Table columns={columns} dataSource={logs} />
+            <Button type="default" onClick={handleRefresh} style={{ width: '10%', background: '#F0A500' }}>Refresh</Button>
         </div>
     );
 }
