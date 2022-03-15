@@ -1,67 +1,67 @@
 import React from 'react';
 import {
-  Input,
-  Button,
-  Select,
-  DatePicker,
-  Table,
-  Tag,
+//   Input,
+//   Button,
+//   Select,
+//   DatePicker,
+//   Table,
+//   Tag,
   Empty
 } from 'antd';
-import dateFormat from "dateformat";
+// import dateFormat from "dateformat";
 import axios from 'axios';
-import { BACKEND_URL } from '../assets/config';
-import { GlobalContext } from '../store';
+// import { BACKEND_URL } from '../assets/config';
+// import { GlobalContext } from '../store';
 
 function AttendanceCalculate() {
-    const [global, setGlobal] = React.useContext(GlobalContext);
-    const [employees, setEmployees] = React.useState([]);
-    const [employee, setEmployee] = React.useState('');
-    const [dateRange ,setDateRange] = React.useState([]);
-    const [logs, setLogs] = React.useState([]);
-    const [totalHours, setTotalHours] = React.useState(0.0);
+    // const [global, setGlobal] = React.useContext(GlobalContext);
+    // const [employees, setEmployees] = React.useState([]);
+    // const [employee, setEmployee] = React.useState('');
+    // const [dateRange ,setDateRange] = React.useState([]);
+    // const [logs, setLogs] = React.useState([]);
+    // const [totalHours, setTotalHours] = React.useState(0.0);
 
-    React.useState(() => {
-        (async () => {
-            await axios({
-                method: 'get',
-                url: `https://euodoo-attendance.herokuapp.com/api/v1/attendance/users/`,
-                headers: {
-                    'Authorization': `token ${global.token}`
-                }
-            }).then((res) => {
-                setEmployees(res.data)
-            }).catch((err) => {
-                console.log(err)
-            })
-        })();
-    },[]);
+    // React.useState(() => {
+    //     (async () => {
+    //         await axios({
+    //             method: 'get',
+    //             url: `https://euodoo-attendance.herokuapp.com/api/v1/attendance/users/`,
+    //             headers: {
+    //                 'Authorization': `token ${global.token}`
+    //             }
+    //         }).then((res) => {
+    //             setEmployees(res.data)
+    //         }).catch((err) => {
+    //             console.log(err)
+    //         })
+    //     })();
+    // },[setEmployees]);
 
-    const columns = [
-        {
-          title: 'Employee',
-          dataIndex: 'employee',
-          key: 'employee',
-        },
-        {
-          title: 'Status',
-          dataIndex: 'status',
-          key: 'status',
-          render: status => (
-            <Tag color={status === 'TIMEIN' ? 'green' : 'volcano'} key={status}>
-                {status}
-            </Tag>
-          ),
-        },
-        {
-          title: 'Datetime',
-          dataIndex: 'date_created',
-          key: 'date_created',
-          render: date_created => (<>
-            {dateFormat(new Date(date_created), "dddd | mmmm dS, yyyy | hh:MM TT")}
-          </>)
-        },
-      ];
+    // const columns = [
+    //     {
+    //       title: 'Employee',
+    //       dataIndex: 'employee',
+    //       key: 'employee',
+    //     },
+    //     {
+    //       title: 'Status',
+    //       dataIndex: 'status',
+    //       key: 'status',
+    //       render: status => (
+    //         <Tag color={status === 'TIMEIN' ? 'green' : 'volcano'} key={status}>
+    //             {status}
+    //         </Tag>
+    //       ),
+    //     },
+    //     {
+    //       title: 'Datetime',
+    //       dataIndex: 'date_created',
+    //       key: 'date_created',
+    //       render: date_created => (<>
+    //         {dateFormat(new Date(date_created), "dddd | mmmm dS, yyyy | hh:MM TT")}
+    //       </>)
+    //     },
+    //   ];
 
     // const calculateHours = (data) => {
     //     var start = new Date;
@@ -81,38 +81,38 @@ function AttendanceCalculate() {
         
     // }
 
-    const handleDatePicker = (value, dateString) => {
-        console.log(dateString);
-        setDateRange(dateString);
-    }
+    // const handleDatePicker = (value, dateString) => {
+    //     console.log(dateString);
+    //     setDateRange(dateString);
+    // }
 
-    const handleSelect = (value) => {
-        console.log(value);
-        setEmployee(value);
-    }
+    // const handleSelect = (value) => {
+    //     console.log(value);
+    //     setEmployee(value);
+    // }
 
-    const handleFilterSearch = () => {
-        (async () => {
-            axios({
-                method: 'post',
-                url: `https://euodoo-attendance.herokuapp.com/api/v1/attendance/filter/`,
-                headers: {
-                    'Authorization': `token ${global.token}`,
-                    'Content-Type': 'application/json'
-                },
-                data: {
-                    "employee": employee,
-                    "date_range": dateRange
-                }
-            }).then((res) => {
-                setLogs(res.data)
-                // calculateHours(res.data)
-                console.log(res.data)
-            }).catch((err) => {
-                console.log(err);
-            })
-        })();
-    }
+    // const handleFilterSearch = () => {
+    //     (async () => {
+    //         axios({
+    //             method: 'post',
+    //             url: `https://euodoo-attendance.herokuapp.com/api/v1/attendance/filter/`,
+    //             headers: {
+    //                 'Authorization': `token ${global.token}`,
+    //                 'Content-Type': 'application/json'
+    //             },
+    //             data: {
+    //                 "employee": employee,
+    //                 "date_range": dateRange
+    //             }
+    //         }).then((res) => {
+    //             setLogs(res.data)
+    //             // calculateHours(res.data)
+    //             console.log(res.data)
+    //         }).catch((err) => {
+    //             console.log(err);
+    //         })
+    //     })();
+    // }
 
     return (
         <div style={{

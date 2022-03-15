@@ -1,5 +1,5 @@
 import React from 'react';
-import { Layout, Menu, Button, PageHeader } from 'antd';
+import { Layout, Menu} from 'antd';
 import {
     InfoCircleOutlined,
   TeamOutlined,
@@ -9,8 +9,6 @@ import {
   LogoutOutlined,
   CalculatorOutlined
 } from '@ant-design/icons';
-import AccountView from './AccountView';
-import AttendanceView from './AttendanceScan';
 import { Link, Outlet } from 'react-router-dom';
 import { GlobalContext } from '../store';
 
@@ -18,7 +16,7 @@ const { Header, Content, Footer, Sider } = Layout;
 const { SubMenu } = Menu;
 
 function AdminView() {
-    const [global, setGlobal] = React.useContext(GlobalContext);
+    const [setGlobal] = React.useContext(GlobalContext);
     const [collapsed, setCollapsed] = React.useState(false);
 
     const handleLogout = () => {

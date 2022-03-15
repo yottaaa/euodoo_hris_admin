@@ -6,10 +6,9 @@ import AttendanceScan from './pages/AttendanceScan';
 import AttendanceLogs from './pages/AttendanceLogs';
 import AttendanceCalculate from './pages/AttendanceCalculate';
 import AccountView from './pages/AccountView';
-import { BrowserRouter, Routes, Route } from 'react-router-dom';
+import { Routes, Route } from 'react-router-dom';
 import { GlobalContext } from './store';
 import axios from 'axios';
-import { BACKEND_URL } from './assets/config';
 
 const App = () => {
   const [global, setGlobal] = React.useContext(GlobalContext);
@@ -38,7 +37,7 @@ const App = () => {
         }});
       })
     })();
-  },[]);
+  },[setGlobal]);
 
   if (global.token === null || global.token === '' || global.token === undefined) {
     return (
