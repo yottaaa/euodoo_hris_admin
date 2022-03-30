@@ -40,7 +40,7 @@ function AdminView() {
                     }}
                 >
                     <div className="logo" />
-                    <Menu theme="dark" defaultSelectedKeys={['1']} mode="inline">
+                    <Menu theme="dark" defaultSelectedKeys={['3']} mode="inline">
                         <SubMenu key="sub1"  icon={<UserOutlined />} title="Account">    
                             <Menu.Item key="1" icon={<UserOutlined />}>
                                 <Link to="/">Admin</Link>
@@ -48,17 +48,17 @@ function AdminView() {
                             <Menu.Item key="2" icon={<LogoutOutlined />} onClick={handleLogout}>Logout</Menu.Item>
                         </SubMenu>
                         <SubMenu key="sub2" icon={<TeamOutlined />} title="Attendance">
-                            <Menu.Item key="3" icon={<QrcodeOutlined />}>
+                            {/* <Menu.Item key="3" icon={<QrcodeOutlined />}>
                                 <Link to="/scan">Scan QRCode</Link>
-                            </Menu.Item>
-                            <Menu.Item key="4" icon={<ProfileOutlined />}>
+                            </Menu.Item> */}
+                            <Menu.Item key="3" icon={<ProfileOutlined />}>
                                 <Link to="/logs">Logs</Link>
                             </Menu.Item>
-                            <Menu.Item key="5" icon={<CalculatorOutlined />}>
+                            {/* <Menu.Item key="5" icon={<CalculatorOutlined />}>
                                 <Link to="/calculator">Calculator</Link>
-                            </Menu.Item>
+                            </Menu.Item> */}
                         </SubMenu>
-                        <Menu.Item key="6" icon={<InfoCircleOutlined />}>
+                        <Menu.Item key="4" icon={<InfoCircleOutlined />}>
                         About
                         </Menu.Item>
                     </Menu>

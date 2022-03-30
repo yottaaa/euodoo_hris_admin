@@ -5,7 +5,7 @@ import {
 } from 'antd';
 import { UserOutlined, LockOutlined } from '@ant-design/icons';
 import { GlobalContext } from '../store'
-import { BACKEND_URL } from '../assets/config';
+import { BACKEND_DEV } from '../assets/config';
 import axios from 'axios';
 
 export default function LoginView() {
@@ -18,7 +18,7 @@ export default function LoginView() {
         (async () => {
             axios({
                 method: 'post',
-                url: `https://euodoo-attendance.herokuapp.com/api/v1/auth/admin_login/`,
+                url: `${BACKEND_DEV}/api/v1/auth/admin_login/`,
                 data: {
                     'username': values.username,
                     'password': values.password

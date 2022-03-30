@@ -1,6 +1,6 @@
 import React from 'react';
 import axios from 'axios';
-import { BACKEND_URL } from '../assets/config';
+import { BACKEND_DEV, BACKEND_PROD } from '../assets/config';
 import { Table, Tag, Space, Input,
     Button,
     Select,
@@ -25,7 +25,7 @@ function AttendanceLogs() {
         (async () => {
             await axios({
                 method: 'get',
-                url: `https://euodoo-attendance.herokuapp.com/api/v1/attendance/all/`,
+                url: `${BACKEND_DEV}/api/v1/attendance/all/`,
                 headers: {
                     'Authorization': `token ${global.token}`
                 }
@@ -33,12 +33,13 @@ function AttendanceLogs() {
                 console.log(res.data)
                 handleExportData(res.data)
                 setLogs(res.data)
+                setFilename('all')
             }).catch((err) => {
                 console.log(err)
             })
             await axios({
                 method: 'get',
-                url: `https://euodoo-attendance.herokuapp.com/api/v1/attendance/users/`,
+                url: `${BACKEND_DEV}/api/v1/attendance/users/`,
                 headers: {
                     'Authorization': `token ${global.token}`
                 }
@@ -57,8 +58,8 @@ function AttendanceLogs() {
     const columns = [
         {
           title: 'Employee',
-          dataIndex: 'employee',
-          key: 'employee',
+          dataIndex: 'emp_uname',
+          key: 'emp_uname',
         },
         {
           title: 'Status',
@@ -85,12 +86,14 @@ function AttendanceLogs() {
         data.forEach(info => {
             exData.push({
                 'id': info['id'],
-                'employee': info['employee'],
-                'date_created': dateFormat(new Date(info['date_created']), "d-mm-yyyy"),
+                'employee': `${info['emp_firstname']} ${info['emp_lastname']}`,
+                'status': info['status'],
+                'date_created (DD/MM/YYYY)': dateFormat(new Date(info['date_created']), "d-mm-yyyy"),
                 'time_created': dateFormat(new Date(info['date_created']), "hh:MM TT")
             })
         });
-        setExportData(exData)
+        setExportData(exData);
+        setFilename(`${employee}_${dateRange.join('_to_')}`)
     }
 
     const handleDatePicker = (value, dateString) => {
@@ -108,7 +111,7 @@ function AttendanceLogs() {
         (async () => {
             await axios({
                 method: 'get',
-                url: `https://euodoo-attendance.herokuapp.com/api/v1/attendance/all/`,
+                url: `${BACKEND_DEV}/api/v1/attendance/all/`,
                 headers: {
                     'Authorization': `token ${global.token}`
                 }
@@ -117,6 +120,8 @@ function AttendanceLogs() {
                 console.log(res.data)
                 setLogs(res.data)
                 setLoading(false);
+                setDateRange([]);
+                setEmployee('');
             }).catch((err) => {
                 console.log(err)
                 setLoading(false);
@@ -129,7 +134,7 @@ function AttendanceLogs() {
         (async () => {
             axios({
                 method: 'post',
-                url: `https://euodoo-attendance.herokuapp.com/api/v1/attendance/filter/`,
+                url: `${BACKEND_DEV}/api/v1/attendance/filter/`,
                 headers: {
                     'Authorization': `token ${global.token}`,
                     'Content-Type': 'application/json'
@@ -141,7 +146,6 @@ function AttendanceLogs() {
             }).then((res) => {
                 setLogs(res.data)
                 handleExportData(res.data)
-                // calculateHours(res.data)
                 console.log(res.data)
                 setLoading(false);
             }).catch((err) => {
@@ -158,19 +162,19 @@ function AttendanceLogs() {
             padding: '10px'
         }}>
             <Input.Group compact style={{ margin: '10px 0px' }}>
-                <Select defaultValue="Select Employee" onChange={handleSelect} style={{ width: '30%' }}>
+                <Select defaultValue={employee} onChange={handleSelect} style={{ width: '30%' }}>
                     {employees.map(employee => (
                         <Select.Option key={employee.id} value={employee.username}>{employee.username}</Select.Option>
                     ))}
                 </Select>
-                <DatePicker.RangePicker onChange={handleDatePicker} style={{ width: '60%' }} />
+                <DatePicker.RangePicker value={dateRange} onChange={handleDatePicker} style={{ width: '60%' }} />
                 <Button type="primary" onClick={handleFilterSearch} style={{ width: '10%' }}
                     loading={loading}
                 >Search</Button>
             </Input.Group>
             {/* <h1>8 Hours</h1> */}
             <Table columns={columns} dataSource={logs} />
-            <CsvDownload data={exportData} filename={'euodoo_dtr.csv'} style={{
+            <CsvDownload data={exportData} filename={`${filename}.csv`} style={{
                 margin: '0px 20px',
                 background: '#B33030',
                 cursor: 'pointer',
