@@ -9,7 +9,7 @@ import AccountView from './pages/AccountView';
 import { Routes, Route } from 'react-router-dom';
 import { GlobalContext } from './store';
 import axios from 'axios';
-import { BACKEND_DEV } from './assets/config';
+import { BACKEND_DEV, BACKEND_PROD } from './assets/config';
 
 const App = () => {
   const [global, setGlobal] = React.useContext(GlobalContext);
@@ -20,7 +20,7 @@ const App = () => {
     (async () => {
       await axios({
         method: 'get',
-        url: `${BACKEND_DEV}/api/v1/auth/ping/`,
+        url: `${BACKEND_PROD}/api/v1/auth/ping/`,
         headers: {
           'Authorization': `token ${token}`
         }

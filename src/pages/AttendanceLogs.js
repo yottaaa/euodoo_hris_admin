@@ -4,7 +4,8 @@ import { BACKEND_DEV, BACKEND_PROD } from '../assets/config';
 import { Table, Tag, Space, Input,
     Button,
     Select,
-    DatePicker 
+    DatePicker,
+    Card   
 } from 'antd';
 import { GlobalContext } from '../store';
 import dateFormat from "dateformat";
@@ -13,6 +14,7 @@ import CsvDownload from 'react-json-to-csv';
 
 function AttendanceLogs() {
     const [global] = React.useContext(GlobalContext);
+    const [totalhours, setTotalHours] = React.useState(0.0)
     const [employees, setEmployees] = React.useState([]);
     const [employee, setEmployee] = React.useState('');
     const [dateRange ,setDateRange] = React.useState([]);
@@ -25,7 +27,7 @@ function AttendanceLogs() {
         (async () => {
             await axios({
                 method: 'get',
-                url: `${BACKEND_DEV}/api/v1/attendance/all/`,
+                url: `${BACKEND_PROD}/api/v1/attendance/all/`,
                 headers: {
                     'Authorization': `token ${global.token}`
                 }
@@ -39,7 +41,7 @@ function AttendanceLogs() {
             })
             await axios({
                 method: 'get',
-                url: `${BACKEND_DEV}/api/v1/attendance/users/`,
+                url: `${BACKEND_PROD}/api/v1/attendance/users/`,
                 headers: {
                     'Authorization': `token ${global.token}`
                 }
@@ -51,7 +53,8 @@ function AttendanceLogs() {
         })();
 
         return () => {
-            setLogs([])
+            setLogs([]);
+            setTotalHours(0.0);
         }
     },[]);
 
@@ -108,10 +111,11 @@ function AttendanceLogs() {
 
     const handleRefresh = () => {
         setLoading(true);
+        setTotalHours(0.0);
         (async () => {
             await axios({
                 method: 'get',
-                url: `${BACKEND_DEV}/api/v1/attendance/all/`,
+                url: `${BACKEND_PROD}/api/v1/attendance/all/`,
                 headers: {
                     'Authorization': `token ${global.token}`
                 }
@@ -120,8 +124,6 @@ function AttendanceLogs() {
                 console.log(res.data)
                 setLogs(res.data)
                 setLoading(false);
-                setDateRange([]);
-                setEmployee('');
             }).catch((err) => {
                 console.log(err)
                 setLoading(false);
@@ -131,10 +133,11 @@ function AttendanceLogs() {
 
     const handleFilterSearch = () => {
         setLoading(true);
+        setTotalHours(0.0);
         (async () => {
             axios({
                 method: 'post',
-                url: `${BACKEND_DEV}/api/v1/attendance/filter/`,
+                url: `${BACKEND_PROD}/api/v1/attendance/filter/`,
                 headers: {
                     'Authorization': `token ${global.token}`,
                     'Content-Type': 'application/json'
@@ -144,7 +147,8 @@ function AttendanceLogs() {
                     "date_range": dateRange
                 }
             }).then((res) => {
-                setLogs(res.data)
+                setTotalHours(res.data.total)
+                setLogs(res.data.logs)
                 handleExportData(res.data)
                 console.log(res.data)
                 setLoading(false);
@@ -162,17 +166,29 @@ function AttendanceLogs() {
             padding: '10px'
         }}>
             <Input.Group compact style={{ margin: '10px 0px' }}>
-                <Select defaultValue={employee} onChange={handleSelect} style={{ width: '30%' }}>
+                <Select onChange={handleSelect} style={{ width: '30%' }}>
                     {employees.map(employee => (
                         <Select.Option key={employee.id} value={employee.username}>{employee.username}</Select.Option>
                     ))}
                 </Select>
-                <DatePicker.RangePicker value={dateRange} onChange={handleDatePicker} style={{ width: '60%' }} />
+                <DatePicker.RangePicker onChange={handleDatePicker} style={{ width: '60%' }} />
                 <Button type="primary" onClick={handleFilterSearch} style={{ width: '10%' }}
                     loading={loading}
                 >Search</Button>
             </Input.Group>
-            {/* <h1>8 Hours</h1> */}
+            { 
+                totalhours != 0.0 ?
+                (<h1 style={{fontSize: '2.5rem'}}>
+                    {totalhours}
+                    <span style={{
+                        fontSize: '1rem', 
+                        marginLeft: '10px',
+                        color: '#8D8DAA'
+                    }}>total hours</span>
+                </h1>)
+                :
+                <></>
+            }
             <Table columns={columns} dataSource={logs} />
             <CsvDownload data={exportData} filename={`${filename}.csv`} style={{
                 margin: '0px 20px',
