@@ -1,15 +1,21 @@
 import React from 'react';
 import axios from 'axios';
 import { BACKEND_DEV, BACKEND_PROD } from '../assets/config';
-import { Table, Tag, Space, Input,
+import { 
+    Table, 
+    Tag, 
+    Space, 
+    Input,
     Button,
     Select,
     DatePicker,
-    Card   
+    Drawer   
 } from 'antd';
 import { GlobalContext } from '../store';
 import dateFormat from "dateformat";
 import CsvDownload from 'react-json-to-csv';
+
+import LogManagement from '../components/LogManagement';
 
 
 function AttendanceLogs() {
@@ -22,12 +28,23 @@ function AttendanceLogs() {
     const [exportData, setExportData] = React.useState([]);
     const [loading, setLoading] = React.useState(false);
     const [filename, setFilename] = React.useState('');
+    const [empID, setEmpID] = React.useState(null);
+    const [visible, setVisible] = React.useState(false);
+
+    const [empLog, setEmpLog] = React.useState({
+        id: 0,
+        emp_uname: '',
+        emp_firstname: '',
+        emp_lastname: '',
+        status: '',
+        date_created: ''
+    })
 
     React.useEffect(() => {
         (async () => {
             await axios({
                 method: 'get',
-                url: `${BACKEND_PROD}/api/v1/attendance/all/`,
+                url: `${BACKEND_DEV}/api/v1/attendance/all/`,
                 headers: {
                     'Authorization': `token ${global.token}`
                 }
@@ -41,7 +58,7 @@ function AttendanceLogs() {
             })
             await axios({
                 method: 'get',
-                url: `${BACKEND_PROD}/api/v1/attendance/users/`,
+                url: `${BACKEND_DEV}/api/v1/attendance/users/`,
                 headers: {
                     'Authorization': `token ${global.token}`
                 }
@@ -57,6 +74,31 @@ function AttendanceLogs() {
             setTotalHours(0.0);
         }
     },[]);
+
+    const closeDrawer = () => {
+        setEmpLog({});
+        setVisible(false);
+    }
+
+    const viewLog = (id) => {
+        setEmpID(id);
+        (async () => {
+            await axios({
+                method: 'get',
+                url: `${BACKEND_DEV}/api/v1/attendance/log/${id}/`,
+                headers: {
+                    'Authorization': `token ${global.token}`
+                }
+            }).then((res) => {
+                console.log(res.data)
+                setEmpLog(res.data)
+                setVisible(true);
+            }).catch((err) => {
+                console.log(err)
+                setVisible(false);
+            })
+        })();
+    }
 
     const columns = [
         {
@@ -82,6 +124,16 @@ function AttendanceLogs() {
             {dateFormat(new Date(date_created), "dddd | mmmm dS, yyyy | hh:MM TT")}
           </>)
         },
+        {
+            title: 'Action',
+            dataIndex: 'id',
+            key: 'id',
+            render: id => (<>
+                <Button type='primary' onClick={() => viewLog(id)}>
+                  View
+                </Button>
+            </>)
+          },
       ];
 
     const handleExportData = (data) => {
@@ -115,7 +167,7 @@ function AttendanceLogs() {
         (async () => {
             await axios({
                 method: 'get',
-                url: `${BACKEND_PROD}/api/v1/attendance/all/`,
+                url: `${BACKEND_DEV}/api/v1/attendance/all/`,
                 headers: {
                     'Authorization': `token ${global.token}`
                 }
@@ -137,7 +189,7 @@ function AttendanceLogs() {
         (async () => {
             axios({
                 method: 'post',
-                url: `${BACKEND_PROD}/api/v1/attendance/filter/`,
+                url: `${BACKEND_DEV}/api/v1/attendance/filter/`,
                 headers: {
                     'Authorization': `token ${global.token}`,
                     'Content-Type': 'application/json'
@@ -190,7 +242,7 @@ function AttendanceLogs() {
                 <></>
             }
             <Table columns={columns} dataSource={logs} />
-            <CsvDownload data={exportData} filename={`${filename}.csv`} style={{
+            {/* <CsvDownload data={exportData} filename={`${filename}.csv`} style={{
                 margin: '0px 20px',
                 background: '#B33030',
                 cursor: 'pointer',
@@ -199,12 +251,21 @@ function AttendanceLogs() {
                 padding: '4px 20px'
             }}>
                 Export Data
-            </CsvDownload>
+            </CsvDownload> */}
             <Button type="default" 
                 onClick={handleRefresh} 
                 style={{ width: '10%', background: '#F0A500' }}
                 loading={loading}
             >Refresh</Button>
+            <Drawer
+                title={`Attendance Log #${empID}`}
+                placement={'right'}
+                width={300}
+                onClose={closeDrawer}
+                visible={visible}
+            >
+                <LogManagement empLog={empLog}/>
+            </Drawer>
         </div>
     );
 }

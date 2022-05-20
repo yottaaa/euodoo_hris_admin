@@ -18,7 +18,7 @@ export default function LoginView() {
         (async () => {
             axios({
                 method: 'post',
-                url: `${BACKEND_PROD}/api/v1/auth/admin_login/`,
+                url: `${BACKEND_DEV}/api/v1/auth/admin_login/`,
                 data: {
                     'username': values.username,
                     'password': values.password
