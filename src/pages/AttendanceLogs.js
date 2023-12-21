@@ -30,6 +30,7 @@ function AttendanceLogs() {
     const [filename, setFilename] = React.useState('');
     const [empID, setEmpID] = React.useState(null);
     const [visible, setVisible] = React.useState(false);
+    const [datePickerValue, setDatePickerValue] = React.useState(null);
 
     const [empLog, setEmpLog] = React.useState({
         id: 0,
@@ -153,6 +154,7 @@ function AttendanceLogs() {
 
     const handleDatePicker = (value, dateString) => {
         console.log(dateString);
+        setDatePickerValue(value);
         setDateRange(dateString);
     }
 
@@ -164,6 +166,8 @@ function AttendanceLogs() {
     const handleRefresh = () => {
         setLoading(true);
         setTotalHours(0.0);
+        setEmployee("");
+        setDatePickerValue(null);
         (async () => {
             await axios({
                 method: 'get',
@@ -176,6 +180,7 @@ function AttendanceLogs() {
                 console.log(res.data)
                 setLogs(res.data)
                 setLoading(false);
+                setEmployee("")
             }).catch((err) => {
                 console.log(err)
                 setLoading(false);
@@ -218,12 +223,12 @@ function AttendanceLogs() {
             padding: '10px'
         }}>
             <Input.Group compact style={{ margin: '10px 0px' }}>
-                <Select onChange={handleSelect} style={{ width: '30%' }}>
+                <Select allowClear value={employee} onChange={handleSelect} style={{ width: '30%' }}>
                     {employees.map(employee => (
                         <Select.Option key={employee.id} value={employee.username}>{employee.username}</Select.Option>
                     ))}
                 </Select>
-                <DatePicker.RangePicker onChange={handleDatePicker} style={{ width: '60%' }} />
+                <DatePicker.RangePicker value={datePickerValue} onChange={handleDatePicker} style={{ width: '60%' }} />
                 <Button type="primary" onClick={handleFilterSearch} style={{ width: '10%' }}
                     loading={loading}
                 >Search</Button>
@@ -242,19 +247,20 @@ function AttendanceLogs() {
                 <></>
             }
             <Table columns={columns} dataSource={logs} />
-            {/* <CsvDownload data={exportData} filename={`${filename}.csv`} style={{
+            <CsvDownload data={exportData} filename={`${filename}.csv`} style={{
                 margin: '0px 20px',
                 background: '#B33030',
                 cursor: 'pointer',
                 outline: 'none',
                 border: 0,
-                padding: '4px 20px'
+                padding: '4px 20px',
+                color: "white"
             }}>
                 Export Data
-            </CsvDownload> */}
+            </CsvDownload>
             <Button type="default" 
                 onClick={handleRefresh} 
-                style={{ width: '10%', background: '#F0A500' }}
+                style={{ width: '10%', background: '#F0A500', color: "white" }}
                 loading={loading}
             >Refresh</Button>
             <Drawer

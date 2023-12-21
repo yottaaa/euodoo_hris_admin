@@ -7,6 +7,7 @@ import {
     ExportOutlined,
     ProfileOutlined,
     LogoutOutlined,
+    CalculatorOutlined
 } from '@ant-design/icons';
 import { Link, Outlet } from 'react-router-dom';
 import { GlobalContext } from '../store';
@@ -47,9 +48,9 @@ function AdminView() {
                             <Menu.Item key="1" icon={<ProfileOutlined />}>
                                 <Link to="/">Logs</Link>
                             </Menu.Item>
-                            <Menu.Item key="2" icon={<ExportOutlined />}>
+                            {/* <Menu.Item key="2" icon={<ExportOutlined />}>
                                 <Link to="/export">Export</Link>
-                            </Menu.Item>
+                            </Menu.Item> */}
                             {/* <Menu.Item key="5" icon={<CalculatorOutlined />}>
                                 <Link to="/calculator">Calculator</Link>
                             </Menu.Item> */}
